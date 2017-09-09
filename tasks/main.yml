@@ -20,6 +20,7 @@
     path: /usr/local/lib/node_modules/google-font-installer/lib/system-font.js
     regexp: '^(.*)os.tmpDir(.*)$'
     line: '\1os.tmpDir\2'
+    backrefs: yes
 
 - name: Install global Google Fonts
   shell: gfi install "{{ item }}"

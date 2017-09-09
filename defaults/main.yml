@@ -1,5 +1,23 @@
 ---
-# defaults file for ansible-role-computername
 
-change_diskname: no
-computername: "ChangeThis"
+# Specify global fonts in a global profile within Superlumic; group and
+# personal fonts in the appropriate profiles
+#
+# Fonts must be correctly capitalised. Fonts with spaces in the name
+# must be quoted. Font names are *not* validated, and will fail silently.
+# Examples:
+#   - "Indie Flower"
+#   - "Libre Barcode 128"
+#   - "Open Sans"
+#   - Raleway
+#   - Ubuntu
+#
+# See the Google Fonts site (https://fonts.google.com) for details of
+# the available fonts, and more information on font usage.
+#
+# The role does nothing unless at least one of these contains at least
+# one font name at run time.
+
+global_google_fonts: []
+group_google_fonts: []
+personal_google_fonts: []

@@ -1,43 +1,24 @@
 ---
 
-- name: set computername
-  shell: scutil --set ComputerName {{ computername }}
-  become: yes
-  when: ansible_hostname != computername
+- name: Install node package manager
+  homebrew: "name=npm state=present"
+  when: global_google_fonts or group_google_fonts or personal_google_fonts
 
-- name: set hostname
-  shell: scutil --set HostName {{ computername }}
-  become: yes
-  when: ansible_hostname != computername
+- name: Install Google Fonts Installer
+  shell: npm install -g google-font-installer
+  when: global_google_fonts or group_google_fonts or personal_google_fonts
 
-- name: set localhostname
-  shell: scutil --set LocalHostName {{ computername }}
-  become: yes
-  when: ansible_hostname != computername
+- name: Install global Google Fonts.
+  shell: gfi install "{{ item }}"
+  with_items: "{{ global_google_fonts }}"
+  when: global_google_fonts
 
-- name: set the netbios name
-  become: yes
-  osx_defaults:
-    domain: com.apple.smb.server
-    key: NetBIOSName
-    type: string
-    value: "{{ computername }}"
-    state: present
+- name: Install group Google Fonts.
+  shell: gfi install "{{ item }}"
+  with_items: "{{ global_google_fonts }}"
+  when: group_google_fonts
 
-- name: get the boot disk name
-  when: change_diskname
-  shell: 'system_profiler SPSoftwareDataType
-    | grep "Boot Volume"
-    | sed "s/.*Boot Volume: //"'
-  register: boot_disk_name_result
-  # debug: var=boot_disk_name_result
-  changed_when: False
-  ignore_errors: yes
-
-- name: set the boot disk name
-  become: yes
-  shell: '/usr/sbin/diskutil
-    rename "boot_disk_name_result.stdout"
-    "{{computername}}disk"'
-  when: 'change_diskname and boot_disk_name_result.stdout
-    != "{{computername}}disk"'
+- name: Install personal Google Fonts.
+  shell: gfi install "{{ item }}"
+  with_items: "{{ global_google_fonts }}"
+  when: personal_google_fonts

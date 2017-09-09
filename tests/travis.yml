@@ -2,5 +2,9 @@
 - hosts: 127.0.0.1
   connection: local
 
+  vars:
+    - personal_google_fonts:
+        - "Indie Flower"
+
   roles:
-    - ansible-role-computername
+    - ansible-role-google-fonts

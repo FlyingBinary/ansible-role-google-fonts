@@ -14,7 +14,7 @@
 # This task can be removed once GFI is updated
 # https://github.com/lordgiotto/google-font-installer/pull/7
 - name: Patch Google Fonts Installer
-  shell: 'sed -i "s/os.tmpDir/os.tmpdir/g" /usr/local/lib/node_modules/google-font-installer/lib/system-font.js'
+  shell: 'sed -i "" "s/os.tmpDir/os.tmpdir/g" /usr/local/lib/node_modules/google-font-installer/lib/system-font.js'
   when: global_google_fonts or group_google_fonts or personal_google_fonts
 
 - name: Install global Google Fonts

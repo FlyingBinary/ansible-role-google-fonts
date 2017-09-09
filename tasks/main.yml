@@ -8,17 +8,26 @@
   shell: npm install -g google-font-installer
   when: global_google_fonts or group_google_fonts or personal_google_fonts
 
-- name: Install global Google Fonts.
+# 2017-0909
+# Current version of GFI uses the deprecated os.tmpDir call, and Ansible throws an error
+# Patch the single offending line of code, rather than ignoring Ansible errors
+# This task can be removed once GFI is updated
+# https://github.com/lordgiotto/google-font-installer/pull/7
+- name: Patch Google Fonts Installer
+  shell: sed -i "s/os.tmpDir/os.tmpdir/g" /usr/local/lib/node_modules/google-font-installer/lib/system-font.js
+  when: global_google_fonts or group_google_fonts or personal_google_fonts
+
+- name: Install global Google Fonts
   shell: gfi install "{{ item }}"
   with_items: "{{ global_google_fonts }}"
   when: global_google_fonts
 
-- name: Install group Google Fonts.
+- name: Install group Google Fonts
   shell: gfi install "{{ item }}"
   with_items: "{{ global_google_fonts }}"
   when: group_google_fonts
 
-- name: Install personal Google Fonts.
+- name: Install personal Google Fonts
   shell: gfi install "{{ item }}"
   with_items: "{{ global_google_fonts }}"
   when: personal_google_fonts

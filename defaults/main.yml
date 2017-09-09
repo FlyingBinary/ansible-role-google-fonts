@@ -1,0 +1,5 @@
+---
+# defaults file for ansible-role-computername
+
+change_diskname: no
+computername: "ChangeThis"

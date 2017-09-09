@@ -1,0 +1,43 @@
+---
+
+- name: set computername
+  shell: scutil --set ComputerName {{ computername }}
+  become: yes
+  when: ansible_hostname != computername
+
+- name: set hostname
+  shell: scutil --set HostName {{ computername }}
+  become: yes
+  when: ansible_hostname != computername
+
+- name: set localhostname
+  shell: scutil --set LocalHostName {{ computername }}
+  become: yes
+  when: ansible_hostname != computername
+
+- name: set the netbios name
+  become: yes
+  osx_defaults:
+    domain: com.apple.smb.server
+    key: NetBIOSName
+    type: string
+    value: "{{ computername }}"
+    state: present
+
+- name: get the boot disk name
+  when: change_diskname
+  shell: 'system_profiler SPSoftwareDataType
+    | grep "Boot Volume"
+    | sed "s/.*Boot Volume: //"'
+  register: boot_disk_name_result
+  # debug: var=boot_disk_name_result
+  changed_when: False
+  ignore_errors: yes
+
+- name: set the boot disk name
+  become: yes
+  shell: '/usr/sbin/diskutil
+    rename "boot_disk_name_result.stdout"
+    "{{computername}}disk"'
+  when: 'change_diskname and boot_disk_name_result.stdout
+    != "{{computername}}disk"'
